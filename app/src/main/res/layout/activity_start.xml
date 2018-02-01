@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_start"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context="com.example.user.chatapplication.StartActivity">
+
+    <TextView
+        android:text="Welcome the to chat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="233dp"
+        android:textColor="#fff"
+        android:textStyle="bold"
+        android:id="@+id/textView"
+        android:textSize="24sp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:backgroundTint="@color/colorAccent"
+        android:textColor="#fff"
+        android:id="@+id/start_login_btn"
+        android:text="already have account" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:id="@+id/start_reg_btn"
+        android:textColor="@color/colorPrimary"
+        android:layout_below="@+id/start_login_btn"
+        android:text="@string/need_new_account" />
+</RelativeLayout>
