@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -13,19 +14,6 @@
         android:id="@+id/user_single_image" />
 
     <TextView
-        android:text="Mamun Hossain"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/user_single_image"
-        android:layout_toEndOf="@+id/user_single_image"
-        android:layout_marginStart="20dp"
-        android:textColor="#000"
-        android:textStyle="bold"
-        android:textSize="15dp"
-        android:layout_marginTop="15dp"
-        android:id="@+id/user_single_name" />
-
-    <TextView
         android:text="I'm on the way"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -36,5 +24,27 @@
         android:layout_marginTop="10dp"
         android:textSize="10dp"
         />
+
+    <TextView
+        android:text="Mamun Hossain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#000"
+        android:textStyle="bold"
+        android:textSize="15dp"
+        android:layout_marginTop="12dp"
+        android:id="@+id/user_single_name"
+        android:layout_alignTop="@+id/user_single_image"
+        android:layout_alignStart="@+id/user_single_status" />
+
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:srcCompat="@drawable/dot"
+        android:id="@+id/active"
+        android:layout_alignTop="@+id/user_single_name"
+        android:layout_toEndOf="@+id/user_single_name"
+        android:visibility="invisible"
+        android:layout_marginStart="70dp" />
 
 </RelativeLayout>

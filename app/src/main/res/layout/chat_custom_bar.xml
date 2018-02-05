@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingRight="10dp"
+    android:background="@color/colorPrimary"
+    >
+
+
+    <TextView
+        android:text="Mamun Hossain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/user_chat_name"
+        android:layout_alignParentTop="true"
+        android:textSize="20dp"
+        android:textColor="#fff"
+        android:textStyle="bold"
+        android:layout_alignParentStart="true" />
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/proimg"
+        android:id="@+id/custom_user_image"
+        tools:layout_marginRight="10dp"
+        android:layout_alignBottom="@+id/chat_status"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:text="online"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12dp"
+        android:textColor="#fff"
+        android:id="@+id/chat_status"
+        android:layout_below="@+id/user_chat_name"
+        android:layout_alignParentStart="true" />
+</RelativeLayout>

@@ -249,6 +249,14 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
     }
+    @Override
+    protected void onStart() {
+        super.onStart();
 
+        if(mCurrentUser != null){
+            mReference = FirebaseDatabase.getInstance().getReference().child("users").child(userID);
+            mReference.child("online").setValue(true);
+        }
+    }
 
 }

@@ -1,18 +1,24 @@
 package com.example.user.chatapplication.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.user.chatapplication.ChatActivity;
 import com.example.user.chatapplication.ProfileActivity;
 import com.example.user.chatapplication.R;
+import com.example.user.chatapplication.UsersActivity;
 import com.example.user.chatapplication.model.Friends;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,6 +41,7 @@ public class FriendsFragment extends Fragment {
     private String user_id;
 
 
+
     public FriendsFragment() {
         // Required empty public constructor
     }
@@ -55,7 +62,7 @@ public class FriendsFragment extends Fragment {
         mFriendRef.keepSynced(true);
 
 
-        friend_recycler.setHasFixedSize(true);
+       // friend_recycler.setHasFixedSize(true);//cause of not showing data at fragment
         friend_recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
@@ -77,16 +84,62 @@ public class FriendsFragment extends Fragment {
             @Override
             protected void populateViewHolder(final FriendHolder viewHolder, final Friends model, int position) {
 
-                String list_user_id = getRef(position).getKey();
+                final String list_user_id = getRef(position).getKey();
 
                 mUserRef.child(list_user_id).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        String userName = dataSnapshot.child("name").getValue().toString();
-                        String thumb_image = dataSnapshot.child("thumb_image").getValue().toString();
+                        final String userName = (String) dataSnapshot.child("name").getValue();
+                        final String thumb_image = (String) dataSnapshot.child("thumb_image").getValue();
+                        String date = model.getDate();
+                        final boolean userOnline = (boolean) dataSnapshot.child("online").getValue();
+                        //final Long last_seen = (Long) dataSnapshot.child("last_online").getValue();
 
-                        viewHolder.setData(userName,model.getDate(),thumb_image,getContext());
+                       //Toast.makeText(getActivity(),last_seen+"",Toast.LENGTH_SHORT).show();
+
+                        viewHolder.setData(userName,date,thumb_image,userOnline,getContext());
+
+                        viewHolder.view.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                CharSequence options[] = new CharSequence[]{"view profile","send message"};
+
+                                final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                builder.setTitle("Select option");
+                                builder.setItems(options, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                        if(i == 0){
+
+                                            Intent intent = new Intent(getContext(),ProfileActivity.class);
+                                            intent.putExtra("userID",list_user_id);
+                                            startActivity(intent);
+
+                                        }
+
+                                        if(i == 1){
+
+                                            Intent intent = new Intent(getContext(),ChatActivity.class);
+                                            intent.putExtra("userID",list_user_id);
+                                            intent.putExtra("userName",userName);
+                                            intent.putExtra("userImage",thumb_image);
+                                            //intent.putExtra("lastOnline",last_seen);
+                                            intent.putExtra("isOnline",userOnline);
+                                            startActivity(intent);
+                                        }
+
+                                    }
+                                });
+
+
+                                builder.show();
+
+                            }
+                        });
+
 
                     }
 
@@ -96,7 +149,7 @@ public class FriendsFragment extends Fragment {
                     }
                 });
 
-                Toast.makeText(getActivity(),list_user_id,Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getActivity(),list_user_id,Toast.LENGTH_SHORT).show();
 
             }
         };
@@ -109,7 +162,6 @@ public class FriendsFragment extends Fragment {
 
     public static class FriendHolder extends RecyclerView.ViewHolder{
 
-
         View view;
 
         public FriendHolder(View itemView) {
@@ -117,18 +169,23 @@ public class FriendsFragment extends Fragment {
             view = itemView;
         }
 
-        public void setData(String name, String date, String thumb_url, final Context context){
+        public void setData(String name, String date, String thumb_url, boolean active,final Context context){
             final TextView txtName = (TextView) view.findViewById(R.id.user_single_name);
             TextView txtTime = (TextView) view.findViewById(R.id.user_single_status);
             CircleImageView profileImage = (CircleImageView) view.findViewById(R.id.user_single_image);
+            ImageView onlineDot = (ImageView)view.findViewById(R.id.active);
 
             txtName.setText(name);
             txtTime.setText(date);
+            if(active == true){
+                onlineDot.setVisibility(View.VISIBLE);
+            }else if(active == false){
+                onlineDot.setVisibility(View.INVISIBLE);
+            }
             if(!thumb_url.equals(null)) {
                 Picasso.with(context).load(thumb_url).placeholder(R.drawable.proimg).into(profileImage);
             }
         }
 
     }
-
 }

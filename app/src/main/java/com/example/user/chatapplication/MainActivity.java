@@ -13,6 +13,12 @@ import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private TabLayout tabLayout;
+    private DatabaseReference userRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         mToolBar = (Toolbar)findViewById(R.id.main_pagr_toolbar);
         setSupportActionBar(mToolBar);
         getSupportActionBar().setTitle("Chat app");
+
 
         //tabs
         viewPager = (ViewPager)findViewById(R.id.main_tab_pager);
@@ -59,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         if(item.getItemId() == R.id.main_logout_btn){
 
             FirebaseAuth.getInstance().signOut();
+            userRef.child("online").setValue(false);
             sentStartActivity();
         }else if(item.getItemId() == R.id.main_settings_btn){
             Intent intent = new Intent(MainActivity.this,SettingsActivity.class);
@@ -75,9 +84,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-
         if(currentUser == null){
            sentStartActivity();
+        }else{
+            userRef = FirebaseDatabase.getInstance().getReference().child("users").child(mAuth.getCurrentUser().getUid());
+            userRef.child("online").setValue(true);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+       /* final String currentDate;
+
+        java.text.DateFormat dateFormat = new SimpleDateFormat("dd/yy  hh:mm aa");
+        currentDate = dateFormat.format(Calendar.getInstance().getTime());*/
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if(currentUser != null) {
+            userRef.child("last_online").setValue(ServerValue.TIMESTAMP);
+            userRef.child("online").onDisconnect().setValue(false);
         }
     }
 
