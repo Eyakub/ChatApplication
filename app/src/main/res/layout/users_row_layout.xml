@@ -2,40 +2,43 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    >
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
         android:src="@drawable/proimg"
-        android:id="@+id/user_single_image" />
-
+        android:id="@+id/user_single_image"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="10dp" />
     <TextView
-        android:text="I'm on the way"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/user_single_status"
-        android:layout_below="@+id/user_single_name"
-        android:layout_toEndOf="@+id/user_single_image"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="10dp"
-        android:textSize="10dp"
-        />
-
-    <TextView
-        android:text="Mamun Hossain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#000"
         android:textStyle="bold"
         android:textSize="15dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="5dp"
         android:id="@+id/user_single_name"
         android:layout_alignTop="@+id/user_single_image"
         android:layout_alignStart="@+id/user_single_status" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/user_single_status"
+        android:layout_below="@+id/user_single_name"
+        android:layout_toEndOf="@+id/user_single_image"
+        android:layout_marginLeft="20dp"
+        android:textStyle="bold"
+        android:textColor="#000"
+        android:layout_marginTop="6dp"
+        android:textSize="10dp"
+        />
+
 
     <ImageView
         android:layout_width="25dp"
@@ -45,6 +48,8 @@
         android:layout_alignTop="@+id/user_single_name"
         android:layout_toEndOf="@+id/user_single_name"
         android:visibility="invisible"
-        android:layout_marginStart="70dp" />
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/user_single_name" />
+
 
 </RelativeLayout>

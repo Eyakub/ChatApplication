@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:text="Mamun Hossain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#000"
+        android:textStyle="bold"
+        android:textSize="15dp"
+        android:layout_marginTop="5dp"
+        android:id="@+id/user_single_name"
+        android:layout_alignTop="@+id/user_single_image"
+        android:layout_alignStart="@+id/user_single_status" />
+
+    <TextView
+        android:text="I'm on the way"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/user_single_status"
+        android:layout_below="@+id/user_single_name"
+        android:layout_toEndOf="@+id/user_single_image"
+        android:layout_marginLeft="20dp"
+        android:textStyle="bold"
+        android:textColor="#000"
+        android:layout_marginTop="6dp"
+        android:textSize="10dp"
+        />
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/proimg"
+        android:id="@+id/user_single_image"
+        android:layout_marginStart="14dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <ImageButton
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        app:srcCompat="@drawable/done"
+        android:id="@+id/accept_req"
+        android:layout_below="@+id/user_single_image"
+        android:layout_centerHorizontal="true" />
+
+    <ImageButton
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        app:srcCompat="@drawable/close"
+        android:layout_marginStart="37dp"
+        android:id="@+id/cancel_req"
+        android:layout_alignTop="@+id/accept_req"
+        android:layout_toEndOf="@+id/accept_req" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="5dp"
+        android:background="#ddd"
+        android:layout_below="@+id/cancel_req"
+        />
+
+</RelativeLayout>

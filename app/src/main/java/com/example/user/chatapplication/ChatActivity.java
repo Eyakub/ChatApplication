@@ -99,7 +99,15 @@ public class ChatActivity extends AppCompatActivity {
         mToolbar = (Toolbar)findViewById(R.id.chat_toolbar);
         setSupportActionBar(mToolbar);
 
-        mAdapter = new MessagingAdapter(message_list);
+        mAuth = FirebaseAuth.getInstance();
+        user_current_id = mAuth.getCurrentUser().getUid();
+        mRootref = FirebaseDatabase.getInstance().getReference();
+
+        user_id = getIntent().getStringExtra("userID");
+        user_name = getIntent().getStringExtra("userName");
+        user_image = getIntent().getStringExtra("userImage");
+
+        mAdapter = new MessagingAdapter(message_list,user_current_id,user_image);
 
         //initialize chat message task
         mChatAdd = (ImageButton) findViewById(R.id.chat_add_btn);
@@ -109,32 +117,28 @@ public class ChatActivity extends AppCompatActivity {
         mRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.message_swipe_layout);
 
 
+        mChatEt.setText("");
+
         layoutManager = new LinearLayoutManager(ChatActivity.this);
         chat_recyclerview.setHasFixedSize(true);
         chat_recyclerview.setLayoutManager(layoutManager);
 
-        chat_recyclerview.setAdapter(mAdapter);
 
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowCustomEnabled(true);
 
-        user_id = getIntent().getStringExtra("userID");
-        user_name = getIntent().getStringExtra("userName");
-        user_image = getIntent().getStringExtra("userImage");
         //last_seen = getIntent().getStringExtra("lastOnline");
         //user_online = getIntent().getBooleanExtra("isOnline",true);
 
-        mAuth = FirebaseAuth.getInstance();
-        user_current_id = mAuth.getCurrentUser().getUid();
-        mRootref = FirebaseDatabase.getInstance().getReference();
 
         mImageStorage = FirebaseStorage.getInstance().getReference();
 
-        //load dat from our datbase
+        //load data from our database
         loadMessages();
 
 
+        chat_recyclerview.setAdapter(mAdapter);
 
         actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -221,22 +225,21 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 sendMessage();
-
             }
         });
 
-        mChatAdd.setOnClickListener(new View.OnClickListener() {
+    /*    mChatAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 Intent gellaryIntent = new Intent();
-                gellaryIntent.setType("image/*");
+                gellaryIntent.setType("image*//*");
                 gellaryIntent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(gellaryIntent,"select image"),GELLARY_PICK);
 
 
             }
-        });
+        });*/
 
 
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -255,7 +258,7 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
-    @Override
+   /* @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -295,7 +298,7 @@ public class ChatActivity extends AppCompatActivity {
                                 .setQuality(50)
                                 .compressToBitmap(thumb_file);
 
-                        thumb_bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+                        thumb_bitmap.compress(Bitmap.CompressFormat.JPEG,50, baos);
 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -338,6 +341,8 @@ public class ChatActivity extends AppCompatActivity {
                                             @Override
                                             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
 
+                                                finish();
+                                                startActivity(getIntent());
 
                                                 if (databaseError != null) {
 
@@ -356,9 +361,11 @@ public class ChatActivity extends AppCompatActivity {
 
                 }
             }
-        }
+
+        }*/
 
     private void loadMoreMessages() {
+
 
         DatabaseReference messageRef =  mRootref.child("messages").child(user_current_id)
                 .child(user_id);
@@ -366,6 +373,7 @@ public class ChatActivity extends AppCompatActivity {
         messageRef.keepSynced(true);
 
         Query message_query = messageRef.orderByKey().endAt(mLastKey).limitToLast(10);
+        message_query.keepSynced(true);
 
         message_query.addChildEventListener(new ChildEventListener() {
             @Override
@@ -374,7 +382,10 @@ public class ChatActivity extends AppCompatActivity {
                 Message message = dataSnapshot.getValue(Message.class);
                 String message_key = dataSnapshot.getKey();
                 if(!prevKey.equals(message_key)) {
-                    message_list.add(itemPosition++, message);
+                    if(!message.equals(null)){
+                        message_list.add(itemPosition++, message);
+                    }
+
                 }else{
                     prevKey = mLastKey;
                 }
@@ -420,6 +431,8 @@ public class ChatActivity extends AppCompatActivity {
 
         Query message_query = messageRef.limitToLast(mCurrentPage * TOTAL_ITEM_TO_LOAD);
         messageRef.keepSynced(true);
+        message_query.keepSynced(true);
+        mRootref.keepSynced(true);
 
 
         message_query.addChildEventListener(new ChildEventListener() {
@@ -436,7 +449,9 @@ public class ChatActivity extends AppCompatActivity {
                     prevKey = message_key;
 
                 }
-                message_list.add(message);
+                if(!message.equals(null)){
+                    message_list.add(message);
+                }
                 mAdapter.notifyDataSetChanged();
 
                 mRefreshLayout.setRefreshing(false);

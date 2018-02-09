@@ -32,12 +32,12 @@
         />
 
     <ImageView
-        android:layout_width="300dp"
-        android:layout_height="200dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/chat_message_image"
         android:scaleType="centerCrop"
         android:layout_toRightOf="@+id/chat_user_image"
+        android:layout_below="@+id/chat_user_message"
         />
-
 
 </RelativeLayout>
